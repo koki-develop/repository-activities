@@ -1,6 +1,6 @@
-# Repository Activities Weekly
+# Repository Activities
 
-- [Latest Summaries](https://github.com/koki-develop/repository-activities-weekly/releases/latest)
+- [Latest Summaries](https://github.com/koki-develop/repository-activities/releases/latest)
 
 ## Repositories
 

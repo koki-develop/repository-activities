@@ -1,4 +1,4 @@
-name: Weekly
+name: Daily
 
 permissions: {}
 
@@ -75,7 +75,7 @@ jobs:
 
             const lines = [];
             for (const repository of repositories) {
-              lines.push(`- [${repository}](https://github.com/koki-develop/repository-activities-weekly/blob/${DATE}/${repository}/${DATE}.md)`);
+              lines.push(`- [${repository}](https://github.com/koki-develop/repository-activities/blob/${DATE}/${repository}/${DATE}.md)`);
             }
             return lines.join("\n");
       - name: Print release note
