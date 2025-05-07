@@ -8,6 +8,9 @@ on:
       repository:
         required: true
         type: string
+    outputs:
+      summary:
+        value: ${{ jobs.summarize.outputs.summary }}
 
 jobs:
   summarize:
