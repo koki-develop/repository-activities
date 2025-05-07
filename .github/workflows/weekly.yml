@@ -1,0 +1,28 @@
+name: Weekly
+
+permissions: {}
+
+on:
+  workflow_dispatch:
+
+jobs:
+  summarize:
+    uses: ./.github/workflows/_summarize.yml
+    strategy:
+      matrix:
+        repository:
+          - hashicorp/terraform
+    permissions:
+      contents: read
+      models: read
+    with:
+      repository: ${{ matrix.repository }}
+
+  output-summaries:
+    needs: summarize
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo outputs
+        run: echo "${OUTPUTS}"
+        env:
+          OUTPUTS: ${{ toJSON(needs.summarize.outputs) }}
