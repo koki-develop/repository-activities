@@ -39,7 +39,11 @@ jobs:
           DATE: ${{ inputs.date }}
         run: |
           mkdir -p "${REPOSITORY}"
-          echo "${SUMMARY}" > "${REPOSITORY}/${DATE}.md"
+          {
+            echo "# ${REPOSITORY}"
+            echo ""
+            echo "${SUMMARY}"
+          } > "${REPOSITORY}/${DATE}.md"
 
       - name: Configure git
         run: |
