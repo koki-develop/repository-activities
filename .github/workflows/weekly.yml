@@ -70,8 +70,6 @@ jobs:
             const repositories = JSON.parse(REPOSITORIES_JSON);
 
             const lines = [];
-            lines.push(`# ${DATE}`, "");
-
             for (const repository of repositories) {
               lines.push(`- [${repository}](https://github.com/koki-develop/repository-activities-weekly/tree/main/${repository}/${DATE}.md)`);
             }
