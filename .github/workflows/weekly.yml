@@ -83,6 +83,7 @@ jobs:
   create-release:
     needs:
       - summarize
+      - get-date
       - generate-release-note
     permissions:
       contents: write
@@ -91,6 +92,7 @@ jobs:
       - name: Create release
         env:
           GH_TOKEN: ${{ github.token }}
+          DATE: ${{ needs.get-date.outputs.date }}
           RELEASE_NOTE: ${{ needs.generate-release-note.outputs.release-note }}
         run: |
           gh release create "${DATE}" \
