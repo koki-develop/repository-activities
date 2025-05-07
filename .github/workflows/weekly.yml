@@ -25,4 +25,4 @@ jobs:
       - name: echo outputs
         run: echo "${OUTPUTS}"
         env:
-          OUTPUTS: ${{ toJSON(needs.summarize.outputs) }}
+          OUTPUTS: ${{ toJSON(needs.summarize) }}

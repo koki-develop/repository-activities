@@ -25,6 +25,6 @@ jobs:
           days-ago: 7
           ai-model: openai/gpt-4o-mini
           repository: ${{ inputs.repository }}
-          releases-limit: 2
-          pull-requests-limit: 2
-          issues-limit: 2
+          releases-limit: 1
+          pull-requests-limit: 1
+          issues-limit: 1
