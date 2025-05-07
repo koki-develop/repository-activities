@@ -48,3 +48,33 @@ jobs:
     with:
       date: ${{ needs.get-date.outputs.date }}
       repository: ${{ matrix.repository }}
+
+  generate-release-note:
+    needs:
+      - get-date
+      - list-repositories
+      - summarize
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate release note
+        id: generate
+        uses: actions/github-script@v7
+        env:
+          DATE: ${{ needs.get-date.outputs.date }}
+          REPOSITORIES_JSON: ${{ needs.list-repositories.outputs.json }}
+        with:
+          script: |
+            const { DATE, REPOSITORIES_JSON } = process.env;
+            const repositories = JSON.parse(REPOSITORIES_JSON);
+
+            const lines = [];
+            lines.push(`# ${DATE}`, "");
+
+            for (const repository of repositories) {
+              lines.push(`- [${repository}](https://github.com/koki-develop/repository-activities-weekly/tree/main/${repository}/${DATE}.md)`);
+            }
+            return lines.join("\n");
+      - name: Print release note
+        env:
+          RELEASE_NOTE: ${{ steps.generate.outputs.result }}
+        run: echo "${RELEASE_NOTE}"
