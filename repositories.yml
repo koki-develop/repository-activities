@@ -1,2 +1,2 @@
-- hashicorp/terraform
-- hashicorp/terraform-provider-aws
+- hashicorp/terraform # https://github.com/hashicorp/terraform
+- hashicorp/terraform-provider-aws # https://github.com/hashicorp/terraform-provider-aws
