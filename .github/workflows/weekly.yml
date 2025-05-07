@@ -53,8 +53,9 @@ jobs:
     needs:
       - get-date
       - list-repositories
-      - summarize
     runs-on: ubuntu-latest
+    outputs:
+      release-note: ${{ steps.generate.outputs.result }}
     steps:
       - name: Generate release note
         id: generate
@@ -78,3 +79,20 @@ jobs:
         env:
           RELEASE_NOTE: ${{ steps.generate.outputs.result }}
         run: echo "${RELEASE_NOTE}"
+
+  create-release:
+    needs:
+      - summarize
+      - generate-release-note
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_NOTE: ${{ needs.generate-release-note.outputs.release-note }}
+        run: |
+          gh release create "${DATE}" \
+            --notes "${RELEASE_NOTE}" \
+            --latest
