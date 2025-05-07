@@ -19,6 +19,7 @@ jobs:
       contents: write
       models: read
     steps:
+      - uses: actions/checkout@v4
       - uses: koki-develop/summarize-repository-activities@v0
         id: summarize
         with:
@@ -39,7 +40,6 @@ jobs:
           mkdir -p "${REPOSITORY}"
           echo "${SUMMARY}" >> "${REPOSITORY}/${DATE}.md"
 
-      - uses: actions/checkout@v4
       - name: Configure git
         run: |
           git config --global user.name "github-actions[bot]"
