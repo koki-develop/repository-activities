@@ -55,7 +55,7 @@ jobs:
       - list-repositories
     runs-on: ubuntu-latest
     outputs:
-      release-note: ${{ steps.generate.outputs.result }}
+      release-note: ${{ fromJson(steps.generate.outputs.result) }}
     steps:
       - name: Generate release note
         id: generate
@@ -77,7 +77,7 @@ jobs:
             return lines.join("\n");
       - name: Print release note
         env:
-          RELEASE_NOTE: ${{ steps.generate.outputs.result }}
+          RELEASE_NOTE: ${{ fromJson(steps.generate.outputs.result) }}
         run: echo "${RELEASE_NOTE}"
 
   create-release:
