@@ -39,6 +39,7 @@ jobs:
       - list-repositories
     uses: ./.github/workflows/_summarize.yml
     strategy:
+      max-parallel: 1
       matrix:
         repository: ${{ fromJson(needs.list-repositories.outputs.json) }}
     permissions:
