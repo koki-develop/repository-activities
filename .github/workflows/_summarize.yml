@@ -23,7 +23,7 @@ jobs:
       models: read
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: koki-develop/summarize-repository-activities@e3f2b50ab433ba786190a2721fd7a6a36d9b90fe # v0.0.5
+      - uses: koki-develop/summarize-repository-activities@dc0dbd63d2890ce67b8f4fe2dfb37f4da70c7186 # v0.0.6
         id: summarize
         with:
           locale: ja
