@@ -95,6 +95,9 @@ jobs:
           DATE: ${{ needs.get-date.outputs.date }}
           RELEASE_NOTE: ${{ needs.generate-release-note.outputs.release-note }}
         run: |
+          git fetch origin main
+          git rebase origin/main
+
           git tag -f "${DATE}"
           git push -f origin "${DATE}"
 
