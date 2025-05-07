@@ -40,7 +40,7 @@ jobs:
         run: |
           mkdir -p "${REPOSITORY}"
           {
-            echo "# ${REPOSITORY}"
+            echo "# [${REPOSITORY}](https://github.com/${REPOSITORY})"
             echo ""
             echo "${SUMMARY}"
           } > "${REPOSITORY}/${DATE}.md"
