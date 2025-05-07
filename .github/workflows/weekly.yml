@@ -6,24 +6,44 @@ on:
   workflow_dispatch:
 
 jobs:
+  get-date:
+    runs-on: ubuntu-latest
+    outputs:
+      date: ${{ steps.get-date.outputs.date }}
+    steps:
+      - name: Get date
+        id: get-date
+        run: echo "date=$(date +%Y-%m-%d)" >> "${GITHUB_OUTPUT}"
+
+  list-repositories:
+    runs-on: ubuntu-latest
+    outputs:
+      json: ${{ steps.list.outputs.json }}
+    steps:
+      - name: List repositories
+        id: list
+        env:
+          REPOSITORIES: |
+            - hashicorp/terraform
+            - hashicorp/terraform-provider-aws
+        run: |
+          {
+            echo "json<<EOF"
+            echo "${REPOSITORIES}" | yq --output-format json
+            echo EOF
+          } >> "${GITHUB_OUTPUT}"
+
   summarize:
+    needs:
+      - get-date
+      - list-repositories
     uses: ./.github/workflows/_summarize.yml
     strategy:
       matrix:
-        repository:
-          - hashicorp/terraform
-          - hashicorp/terraform-provider-aws
+        repository: ${{ fromJson(needs.list-repositories.outputs.json) }}
     permissions:
-      contents: read
+      contents: write
       models: read
     with:
+      date: ${{ needs.get-date.outputs.date }}
       repository: ${{ matrix.repository }}
-
-  output-summaries:
-    needs: summarize
-    runs-on: ubuntu-latest
-    steps:
-      - name: echo outputs
-        run: echo "${OUTPUTS}"
-        env:
-          OUTPUTS: ${{ toJSON(needs.summarize) }}

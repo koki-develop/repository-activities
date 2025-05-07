@@ -5,21 +5,19 @@ permissions: {}
 on:
   workflow_call:
     inputs:
+      date:
+        required: true
+        type: string
       repository:
         required: true
         type: string
-    outputs:
-      summary:
-        value: ${{ jobs.summarize.outputs.summary }}
 
 jobs:
   summarize:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       models: read
-    outputs:
-      summary: ${{ steps.summarize.outputs.summary }}
     steps:
       - uses: koki-develop/summarize-repository-activities@v0
         id: summarize
@@ -31,3 +29,26 @@ jobs:
           releases-limit: 1
           pull-requests-limit: 1
           issues-limit: 1
+
+      - name: Save summary
+        env:
+          REPOSITORY: ${{ inputs.repository }}
+          SUMMARY: ${{ steps.summarize.outputs.summary }}
+          DATE: ${{ inputs.date }}
+        run: |
+          mkdir -p "${REPOSITORY}"
+          echo "${SUMMARY}" >> "${REPOSITORY}/${DATE}.md"
+
+      - name: Configure git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit summary
+        env:
+          REPOSITORY: ${{ inputs.repository }}
+          DATE: ${{ inputs.date }}
+        run: |
+          git add "${REPOSITORY}/${DATE}.md"
+          git commit -m "Update summary for ${REPOSITORY} on ${DATE}"
+          git push origin main
