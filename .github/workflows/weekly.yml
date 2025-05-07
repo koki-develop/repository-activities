@@ -12,6 +12,7 @@ jobs:
       matrix:
         repository:
           - hashicorp/terraform
+          - hashicorp/terraform-provider-aws
     permissions:
       contents: read
       models: read
