@@ -20,6 +20,7 @@ jobs:
     outputs:
       json: ${{ steps.list.outputs.json }}
     steps:
+      - uses: actions/checkout@v4
       - name: List repositories
         id: list
         env:
@@ -29,7 +30,7 @@ jobs:
         run: |
           {
             echo "json<<EOF"
-            echo "${REPOSITORIES}" | yq --output-format json
+            cat repositories.yml | yq --output-format json
             echo EOF
           } >> "${GITHUB_OUTPUT}"
 
