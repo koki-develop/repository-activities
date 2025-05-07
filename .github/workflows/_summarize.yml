@@ -52,4 +52,9 @@ jobs:
         run: |
           git add "${REPOSITORY}/${DATE}.md"
           git commit -m "Update summary for ${REPOSITORY} on ${DATE}"
+
+      - name: Push changes
+        run: |
+          git fetch origin main
+          git rebase origin/main
           git push origin main
