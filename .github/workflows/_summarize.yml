@@ -23,6 +23,7 @@ jobs:
       - uses: koki-develop/summarize-repository-activities@v0
         id: summarize
         with:
+          locale: ja
           github-token: ${{ github.token }}
           days-ago: 7
           ai-model: openai/gpt-4o-mini
