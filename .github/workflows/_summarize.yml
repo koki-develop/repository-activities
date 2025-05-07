@@ -28,7 +28,7 @@ jobs:
         with:
           locale: ja
           github-token: ${{ github.token }}
-          days-ago: 7
+          days-ago: 1
           ai-model: openai/gpt-4o-mini
           ai-api-key: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           repository: ${{ inputs.repository }}
