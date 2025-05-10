@@ -58,10 +58,16 @@ jobs:
     needs:
       - get-date
       - list-repositories
+      - summarize
     runs-on: ubuntu-latest
     outputs:
       release-note: ${{ fromJson(steps.generate.outputs.result) }}
     steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Fetch and rebase
+        run: |
+          git fetch origin main
+          git rebase origin/main
       - name: Generate release note
         id: generate
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
@@ -71,11 +77,19 @@ jobs:
         with:
           script: |
             const { DATE, REPOSITORIES_JSON } = process.env;
+            const fs = require("fs");
             const repositories = JSON.parse(REPOSITORIES_JSON);
+            const filtered = repositories.filter((repository) => {
+              return fs.existsSync(`${repository}/${DATE}.md`);
+            });
 
             const lines = [];
-            for (const repository of repositories) {
-              lines.push(`- [${repository}](https://github.com/koki-develop/repository-activities/blob/${DATE}/${repository}/${DATE}.md)`);
+            if (filtered.length > 0) {
+              for (const repository of filtered) {
+                lines.push(`- [${repository}](https://github.com/koki-develop/repository-activities/blob/${DATE}/${repository}/${DATE}.md)`);
+              }
+            } else {
+              lines.push("No updates");
             }
             return lines.join("\n");
       - name: Print release note

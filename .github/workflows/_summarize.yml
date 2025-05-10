@@ -23,7 +23,7 @@ jobs:
       models: read
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: koki-develop/summarize-repository-activities@1b8bdd013549c5b6a363716fe980e47b365d6012 # v0.0.8
+      - uses: koki-develop/summarize-repository-activities@1a082196b43324b0c5094a9e5b96f6c79e4b5620 # v0.0.9
         id: summarize
         with:
           locale: ja
@@ -36,7 +36,13 @@ jobs:
           pull-requests-limit: 20
           issues-limit: 20
 
+      - id: has-changes
+        env:
+          HAS_CHANGES: ${{ steps.summarize.outputs.has-new-release == 'true' || steps.summarize.outputs.has-new-pull-request == 'true' || steps.summarize.outputs.has-new-issue == 'true' }}
+        run: echo "value=${HAS_CHANGES}" >> $GITHUB_OUTPUT
+
       - name: Save summary
+        if: ${{ steps.has-changes.outputs.value == 'true' }}
         env:
           REPOSITORY: ${{ inputs.repository }}
           SUMMARY: ${{ steps.summarize.outputs.summary }}
@@ -50,11 +56,13 @@ jobs:
           } > "${REPOSITORY}/${DATE}.md"
 
       - name: Configure git
+        if: ${{ steps.has-changes.outputs.value == 'true' }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Commit summary
+        if: ${{ steps.has-changes.outputs.value == 'true' }}
         env:
           REPOSITORY: ${{ inputs.repository }}
           DATE: ${{ inputs.date }}
@@ -63,6 +71,7 @@ jobs:
           git commit -m "Update summary for ${REPOSITORY} on ${DATE}"
 
       - name: Push changes
+        if: ${{ steps.has-changes.outputs.value == 'true' }}
         run: |
           git fetch origin main
           git rebase origin/main
