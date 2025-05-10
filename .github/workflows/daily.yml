@@ -51,8 +51,6 @@ jobs:
     with:
       date: ${{ needs.get-date.outputs.date }}
       repository: ${{ matrix.repository }}
-    secrets:
-      PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
   generate-release-note:
     needs:

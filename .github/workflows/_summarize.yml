@@ -11,9 +11,6 @@ on:
       repository:
         required: true
         type: string
-    secrets:
-      PERSONAL_ACCESS_TOKEN:
-        required: true
 
 jobs:
   summarize:
@@ -30,7 +27,7 @@ jobs:
           github-token: ${{ github.token }}
           days-ago: 1
           ai-model: openai/gpt-4o-mini
-          ai-api-key: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          ai-api-key: ${{ github.token }}
           repository: ${{ inputs.repository }}
           releases-limit: 20
           pull-requests-limit: 20
