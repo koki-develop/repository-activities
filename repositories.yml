@@ -1,2 +1,3 @@
 - hashicorp/terraform # https://github.com/hashicorp/terraform
+- hashicorp/terraform-plugin-framework # https://github.com/hashicorp/terraform-plugin-framework
 - hashicorp/terraform-provider-aws # https://github.com/hashicorp/terraform-provider-aws
